@@ -49,5 +49,5 @@ int main(int argc, char **argv)
     printf("Decrypted text: %s\n", text);
 
     printf("DESTROYING THE KEY.\n");
-    free(key);
+    free(key); // useless, just for meme
 }
