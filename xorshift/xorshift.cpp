@@ -4,13 +4,14 @@
 #include <vector>
 
 using std::cout;
+static unsigned long state;
 
-unsigned int & xorshift32(unsigned int & state)
+static unsigned long xorshift32()
 {
     if (state == 0) 
         throw std::runtime_error("Invalid xorshift seed");
     
-    unsigned int x = state;
+    unsigned long x = state;
     x ^= x << 13;
     x ^= x >> 17;
     x ^= x << 5;
@@ -24,11 +25,11 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    unsigned seed = atoi(argv[1]);
-    cout << xorshift32(seed) << "\n";
-    cout << xorshift32(seed) << "\n";
-    cout << xorshift32(seed) << "\n";
-    cout << xorshift32(seed) << "\n";
-    cout << xorshift32(seed) << "\n";
+    state = atol(argv[1]);
+    cout << xorshift32() << "\n";
+    cout << xorshift32() << "\n";
+    cout << xorshift32() << "\n";
+    cout << xorshift32() << "\n";
+    cout << xorshift32() << "\n";
 
 }
