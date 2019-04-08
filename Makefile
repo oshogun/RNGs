@@ -9,22 +9,24 @@ CPPFLAGS = -v -std=c++17 -Wall -Wextra  -Wstrict-aliasing -pedantic -fmax-errors
  -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option\
  -O3
 
-
-
 all: xorshift_release caesar otp
 
 debug: xorshift_debug 
 
 caesar:
+	mkdir -p bin
 	${CC} ${CFLAGS} cyphers/caesar.c -o bin/caesar 
 
 otp:
+	mkdir -p bin
 	${CC} ${CFLAGS} cyphers/otp.c -o bin/otp
 
 xorshift_debug:
+	mkdir -p bin
 	${CPPC} xorshift/xorshift.cpp -o bin/xorshift ${DEBUG_FLAGS} ${CPPFLAGS}
 
 xorshift_release:
+	mkdir -p bin
 	${CPPC} xorshift/xorshift.cpp -o bin/xorshift ${CPPFLAGS}
 
 clean:
