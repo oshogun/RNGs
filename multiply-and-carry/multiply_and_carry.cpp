@@ -3,21 +3,23 @@
 #include <cstdlib>
 #include <array>
 #include <cmath>
+#include <boost/multiprecision/cpp_int.hpp>
 
 using std::cout;
+using namespace boost::multiprecision;
 
 static const unsigned int CYCLE = 4096;
 static const unsigned int C_MAX = 809430660;
 
 struct State {
-    std::array<uint32_t, CYCLE> Q;
-    uint32_t c;
+    std::array<unsigned int, CYCLE> Q;
+    unsigned int c;
     unsigned int i;
 };
 
-uint32_t rand32()
+unsigned int rand32()
 {
-    uint32_t random = rand();
+    unsigned int random = rand();
     return random << 16 | rand();
 }
 
@@ -33,12 +35,12 @@ void initCMWC(State * state, unsigned int seed)
     state->i = CYCLE - 1;
 }
 
-uint32_t randCMWC(State * state)
+unsigned int randCMWC(State * state)
 {
-    uint64_t const a = 18782;
-    uint32_t const m = 0xfffffffe;
-    uint64_t t;
-    uint32_t x;
+    unsigned long long const a = 18782;
+    unsigned int const m = 0xfffffffe;
+    unsigned long long t;
+    unsigned int x;
 
     state->i = (state->i + 1) & (CYCLE - 1);
     t = a * state->Q[state->i] + state->c;
@@ -51,6 +53,15 @@ uint32_t randCMWC(State * state)
     }
     return state->Q[state->i] = m - x;
 }
+
+cpp_int randCMWC4096(State * state)
+{
+    cpp_int n;
+    for(int i = 0; i < 128; i++) {
+        n |= static_cast<cpp_int>(randCMWC(state)) << 32 * i;
+    }
+    return n;
+}
 int main(int argc, char **argv)
 {
     if(argc != 2){
@@ -61,8 +72,5 @@ int main(int argc, char **argv)
     State cmwc;
     unsigned int seed = static_cast<unsigned int>(atoi(argv[1]));
     initCMWC(&cmwc, seed);
-    cout << randCMWC(&cmwc) << "\n";
-    cout << randCMWC(&cmwc) << "\n";
-    cout << randCMWC(&cmwc) << "\n";
-    cout << randCMWC(&cmwc) << "\n";
+    cout << randCMWC4096(&cmwc) << "\n";
 }

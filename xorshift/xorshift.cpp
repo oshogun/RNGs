@@ -10,7 +10,7 @@ using std::cin;
 using namespace boost::multiprecision;
 
 static unsigned int state32; // for xorshift32
-static uint64_t state64; // for xorshift 64
+static unsigned long long state64; // for xorshift 64
 static unsigned int state128[4]; // for xorshift 128
 
 static unsigned int xorshift32()
@@ -44,14 +44,26 @@ static unsigned int xorshift32()
     return state32 = x;
 }
 
-static uint64_t xorshift64()
+static unsigned long long xorshift64()
 {
     if (state64 == 0) 
         throw std::runtime_error("Invalid xorshift seed");   
 
-    uint64_t x = state64;
+    unsigned long long x = state64;
+    
+    #ifdef _DEBUG
+    cout << "\033[1;31m State before first xorshift: " << x << "\033[0m\n";
+    #endif 
     x ^= x << 13;
+    
+    #ifdef _DEBUG
+    cout << "\033[1;32m State before second xorshift: " << x << "\033[0m\n";
+    #endif 
     x ^= x >> 7;
+
+    #ifdef _DEBUG
+    cout << "\033[1;33m State before third xorshift: " << x << "\033[0m\n";
+    #endif 
     x ^= x << 17;
     return state64 = x;
 }
@@ -70,6 +82,34 @@ static unsigned int xorshift128()
     t ^= t >> 8;
     return state128[0] = t ^ s ^ (s >> 19);
 }
+
+cpp_int xorshift4096_32()
+{
+    cpp_int n;
+    for(int i = 0; i < 128; i++) {
+        n |= static_cast<cpp_int>(xorshift32()) << 32 * i;
+    }
+    return n;
+}
+
+cpp_int xorshift4096_64()
+{
+    cpp_int n;
+    for(int i = 0; i < 64; i++) {
+        n |= static_cast<cpp_int>(xorshift64()) << 64 * i;
+    }
+    return n;
+}
+
+cpp_int xorshift4096_128()
+{
+    cpp_int n;
+    for(int i = 0; i < 128; i++) {
+        n |= static_cast<cpp_int>(xorshift128()) << 32 * i;
+    }
+    return n;
+}
+
 int main(int argc, char **argv)
 {
     if (argc < 3) {
@@ -79,7 +119,7 @@ int main(int argc, char **argv)
         return 0;
     }
     int choice = atoi(argv[1]);
-    int1024_t number;
+    cpp_int number;
 
 
     switch (choice) {
@@ -91,21 +131,17 @@ int main(int argc, char **argv)
             #endif 
 
             // Generate a big boy
-            for(int i = 0; i < 32; i++) {
-                number |= static_cast<int1024_t>(xorshift32()) << 32 * i;
-            }
+            number = xorshift4096_32();
             cout << number << "\n";
             break;
         case 64:
-            state64 = static_cast<uint64_t> (atol(argv[2]));
+            state64 = static_cast<unsigned long long> (atol(argv[2]));
 
             #ifdef _DEBUG
             cout << "\033[1;34m xorshift64 with seed " << state64 << "\033[0m\n";
             #endif 
             // Generate a big boy
-            for(int i = 0; i < 16; i++) {
-                number |= static_cast<int1024_t>(xorshift64()) << 64 * i;
-            }
+            number = xorshift4096_64();
             cout << number << "\n";
             break;
         case 128:
@@ -115,15 +151,13 @@ int main(int argc, char **argv)
             state128[3] = static_cast<unsigned int>(atoi(argv[5]));
 
             #ifdef _DEBUG
-            cout << "\033[1;34m xorshift32 with seed {";
+            cout << "\033[1;34m xorshift128 with seed {";
             cout << state128[0] << " " << state128[1];
             cout << " " << state128[2] << " " << state128[3];  
             cout << "}\033[0m\n";
             #endif 
-            for(int i = 0; i < 32; i++) {
-                number |= static_cast<int1024_t>(xorshift128()) << 32 * i;
-            }
             
+            number = xorshift4096_128();
             
             cout << number << "\n";
             break;
