@@ -9,7 +9,7 @@ CPPFLAGS = -v -std=c++17 -Wall -Wextra  -Wstrict-aliasing -pedantic -fmax-errors
  -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option\
  -O3
 
-all: xorshift_release caesar otp
+all: xorshift_release multiply_carry_release caesar otp
 
 debug: xorshift_debug 
 
@@ -28,6 +28,14 @@ xorshift_debug:
 xorshift_release:
 	mkdir -p bin
 	${CPPC} xorshift/xorshift.cpp -o bin/xorshift ${CPPFLAGS}
+
+multiply_carry_debug:
+	mkdir -p bin 
+	${CPPC} multiply-and-carry/multiply_and_carry.cpp -o bin/multiply-and-carry ${DEBUG_FLAGS} ${CPPFLAGS} 
+
+multiply_carry_release:
+	mkdir -p bin 
+	${CPPC} multiply-and-carry/multiply_and_carry.cpp -o bin/multiply-and-carry ${CPPFLAGS} 
 
 clean:
 	rm bin/*

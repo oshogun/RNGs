@@ -70,49 +70,51 @@ static uint32_t xorshift128()
 }
 int main(int argc, char **argv)
 {
-    cout << "Xorshift algorithm test\n";
-    int choice = 0;
-    while(!(choice > 0 && choice <= 3)) {
-        cout << "Select algorithm: \n";
-        cout << "1 - xorshift32\n";
-        cout << "2 - xorshift64\n";
-        cout << "3 - xorshift128\n";
-        cin >> choice;
+    if (argc < 3) {
+        cout << "Usage " << argv[0] << "[32/64/128] [SEED] where ";
+        cout << "[SEED] is the 1 to 4 words to seed the rng separated by ";
+        cout << "spaces.\n";
+        return 0;
     }
+    int choice = atoi(argv[1]);
+    
     
     switch (choice) {
-        case 1:
-            cout << "Input seed:\n";
-            cin >> state32;
-            cout << "Generating a few numbers with xorshift32\n";
-            cout << xorshift32() << "\n";
-            cout << xorshift32() << "\n";
+        case 32:
+            state32 = static_cast<uint32_t>(atoi(argv[2]));
+
+            #ifdef _DEBUG
+            cout << "\033[1;34m xorshift32 with seed " << state32 << "\033[0m\n";
+            #endif 
+
             cout << xorshift32() << "\n";
             break;
-        case 2:
-            cout << "Input seed:\n";
-            cin >> state64;
-            cout << "Generating a few numbers with xorshift64\n";
+        case 64:
+            state64 = static_cast<uint64_t> (atol(argv[2]));
+
+            #ifdef _DEBUG
+            cout << "\033[1;34m xorshift64 with seed " << state64 << "\033[0m\n";
+            #endif 
+
             cout << xorshift64() << "\n";
-            cout << xorshift64() << "\n";
-            cout << xorshift64() << "\n";
+            break;
+        case 128:
+            state128[0] = static_cast<uint32_t>(atoi(argv[2]));
+            state128[1] = static_cast<uint32_t>(atoi(argv[3]));
+            state128[2] = static_cast<uint32_t>(atoi(argv[4]));
+            state128[3] = static_cast<uint32_t>(atoi(argv[5]));
+
+            #ifdef _DEBUG
+            cout << "\033[1;34m xorshift32 with seed {";
+            cout << state128[0] << " " << state128[1];
+            cout << " " << state128[2] << " " << state128[3];  
+            cout << "}\033[0m\n";
+            #endif 
+
+            cout << xorshift128() << "\n";
             break;
         default:
-            cout << "Input first word of seed\n";
-            cin >> state128[0];
-            cout << "Input second word of seed\n";
-            cin >> state128[1];
-            cout << "Input third word of seed\n";
-            cin >> state128[2];
-            cout << "Input fourth word of seed\n";
-            cin >> state128[3];
-            
-
-            cout << "Generating a few numbers with xorshift128\n";
-            cout << xorshift128() << "\n";
-            cout << xorshift128() << "\n";
-            cout << xorshift128() << "\n";
-            cout << xorshift128() << "\n";
+            cout << "Invalid algorithm\n";
     }
 
   
