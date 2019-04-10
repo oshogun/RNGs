@@ -1,4 +1,4 @@
-#include "rng.h"
+#include "rng.hpp"
 
 using namespace PRNG;
 
@@ -63,6 +63,6 @@ cpp_int Xorshift64::random(unsigned int bits)
     
     if (bits == 4096)
         return xorshift4096_64();
-        
+
     return xorshift4096_64() % pow(cpp_int(2), bits);
 }

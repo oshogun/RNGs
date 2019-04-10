@@ -1,4 +1,4 @@
-#include "rng.h"
+#include "rng.hpp"
 #include <iostream>
 #include <cstdlib>
 

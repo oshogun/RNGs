@@ -1,4 +1,4 @@
-#include "rng.h"
+#include "rng.hpp"
 
 using namespace PRNG;
 
