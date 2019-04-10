@@ -52,5 +52,17 @@ unsigned int Xorshift64::random32()
 
 cpp_int Xorshift64::random(unsigned int bits)
 {
+    if (bits == 0)
+        throw std::runtime_error("Invalid number of bits");
+    
+    if (bits == 32)
+        return static_cast<cpp_int>(random32());
+    
+    if (bits == 64)
+        return static_cast<cpp_int>(random64());
+    
+    if (bits == 4096)
+        return xorshift4096_64();
+        
     return xorshift4096_64() % pow(cpp_int(2), bits);
 }

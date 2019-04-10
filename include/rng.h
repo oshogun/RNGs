@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdexcept>
 #include <iterator>
+#include <random>
 
 using boost::multiprecision::pow;
 using boost::multiprecision::cpp_int;
@@ -59,8 +60,31 @@ namespace PRNG
 
         private:
             std::array<unsigned int,4> state;
-            unsigned int xorshift32();
-            cpp_int xorshift4096_32();
+            unsigned int xorshift128();
+            cpp_int xorshift4096_128();
+    };
+
+    class CMWC: public PRNG {
+        public:
+            CMWC();
+            cpp_int random(unsigned int bits);
+            unsigned int random32();
+            unsigned long long random64();
+        private:
+            static const unsigned int CYCLE = 4096;
+            static const unsigned int C_MAX = 809430660;
+
+            struct State {
+                std::array<unsigned int, CYCLE> Q;
+                unsigned int c;
+                unsigned int i;
+            };
+
+            State state;
+            std::random_device rd;
+            unsigned int randCMWC();
+            cpp_int randCMWC4096();
+
     };
 }
 

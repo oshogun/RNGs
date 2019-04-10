@@ -5,18 +5,19 @@ CPPFLAGS = -std=c++17 -Iinclude -Wall -Wextra  -Wstrict-aliasing -pedantic -fmax
  -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option\
  -O3 -fopenmp 
 
-all: xorshift_release
+ FILES = src/xorshift32.cpp src/xorshift64.cpp src/xorshift128.cpp\
+ src/cmwc.cpp src/main.cpp
 
-debug: xorshift_debug 
+all: release
 
-xorshift_debug:
+debug:
 	mkdir -p bin
-	${CPPC} src/xorshift32.cpp -o bin/xorshift ${DEBUG_FLAGS}\
+	${CPPC} ${FILES} -o bin/rng ${DEBUG_FLAGS}\
 	 ${CPPFLAGS} 
 
-xorshift_release:
+release:
 	mkdir -p bin
-	${CPPC} src/xorshift32.cpp src/xorshift64.cpp src/main.cpp -o bin/xorshift ${CPPFLAGS} 
+	${CPPC} ${FILES} -o bin/rng ${CPPFLAGS} 
 
 
 
