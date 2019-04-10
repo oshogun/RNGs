@@ -49,6 +49,19 @@ namespace PRNG
             unsigned long long xorshift64();
             cpp_int xorshift4096_64();
     };
+
+    class Xorshift128: public PRNG {
+        public:
+            void srand(std::array<unsigned int, 4> seed);
+            cpp_int random(unsigned int bits);
+            unsigned int random32();
+            unsigned long long random64();
+
+        private:
+            std::array<unsigned int,4> state;
+            unsigned int xorshift32();
+            cpp_int xorshift4096_32();
+    };
 }
 
 
