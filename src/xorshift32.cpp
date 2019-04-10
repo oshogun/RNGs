@@ -78,13 +78,3 @@ cpp_int Xorshift32::random(unsigned int bits)
     bigNum = bigNum % pow(cpp_int(2), bits);
     return bigNum;
 }
-
-int main()
-{
-    PRNG::Xorshift32 xorzao;
-    xorzao.srand(1234567);
-    std::cout << xorzao.random32() << "\n";
-    std::cout << xorzao.random64() << "\n";
-    std::cout << xorzao.random(16) << "\n";
-    std::cout << xorzao.random(3200) << "\n";
-}

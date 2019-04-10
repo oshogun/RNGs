@@ -16,7 +16,7 @@ xorshift_debug:
 
 xorshift_release:
 	mkdir -p bin
-	${CPPC} src/xorshift32.cpp -o bin/xorshift ${CPPFLAGS} 
+	${CPPC} src/xorshift32.cpp src/xorshift64.cpp src/main.cpp -o bin/xorshift ${CPPFLAGS} 
 
 
 

@@ -39,13 +39,13 @@ namespace PRNG
 
     class Xorshift64: public PRNG {
         public:
-            void srand(unsigned int seed);
+            void srand(unsigned long long seed);
             cpp_int random(unsigned int bits);
             unsigned int random32();
             unsigned long long random64();
             
         private:
-            unsigned int state;
+            unsigned long long state;
             unsigned long long xorshift64();
             cpp_int xorshift4096_64();
     };
