@@ -36,7 +36,7 @@ cpp_int CMWC::randCMWC4096()
 {
     cpp_int n;
     for(int i = 0; i < 128; i++) {
-        n |= static_cast<cpp_int>(randCMWC()) << 32 * i;
+        n |= cpp_int(randCMWC()) << 32 * i;
     }
     return n;
 }
@@ -59,10 +59,10 @@ cpp_int CMWC::random(unsigned int bits)
         throw std::runtime_error("Invalid number of bits");
     
     if (bits == 32)
-        return static_cast<cpp_int>(random32());
+        return cpp_int(random32());
     
     if (bits == 64)
-        return static_cast<cpp_int>(random64());
+        return cpp_int(random64());
     
     if (bits == 4096)
         return randCMWC4096();
