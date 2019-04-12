@@ -55,20 +55,25 @@ unsigned long long CMWC::random64()
 
 cpp_int CMWC::random(unsigned int bits)
 {
+
     if (bits == 0)
         throw std::runtime_error("Invalid number of bits");
     
+    cpp_int bigNum;
+    // avoid unnecessary overhead for 32 bit numbers
     if (bits == 32)
         return cpp_int(random32());
+        
+    int n = bits / 64 == 0 ? 1 : bits / 64;
     
-    if (bits == 64)
-        return cpp_int(random64());
-    
-    if (bits == 4096)
-        return randCMWC4096();
-    
-    cpp_int bigNum = randCMWC4096();
-
-    bigNum = bigNum % pow(cpp_int(2), bits);
+    for (int i = 0; i < n; i++) {
+        bigNum |= cpp_int(random64()) << 64 * i;
+    }
+    if (bits % 64 != 0)
+        bigNum = bigNum % pow(cpp_int(2), bits);
     return bigNum;
+       
 }
+       
+    
+    

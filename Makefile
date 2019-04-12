@@ -6,7 +6,7 @@ CPPFLAGS = -std=c++17 -Iinclude -Wall -Wextra  -Wstrict-aliasing -pedantic -fmax
  -O3 -fopenmp 
 
  FILES = src/xorshift32.cpp src/xorshift64.cpp src/xorshift128.cpp\
- src/cmwc.cpp src/main.cpp
+ src/cmwc.cpp src/prime_gen.cpp src/main.cpp
 
 all: release
 
