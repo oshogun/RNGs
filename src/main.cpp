@@ -20,7 +20,7 @@ int main()
     };
     for (auto a: sizes) {
         start = chrono::steady_clock::now();
-            primegen.generateOdd(rng, a);
+            rng.random(a);
         end = chrono::steady_clock::now();
         std::cout << "Elapsed time in nano (" << a << "bits): "
             << chrono::duration_cast<chrono::nanoseconds>(end - start).count()

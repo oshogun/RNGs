@@ -38,15 +38,6 @@ unsigned int Xorshift32::xorshift32()
     return state = x;
 }
 
-cpp_int Xorshift32::xorshift4096_32()
-{
-    cpp_int n;
-    for(int i = 0; i < 128; i++) {
-        n |= cpp_int(xorshift32()) << 32 * i;
-    }
-    return n;
-}
-
 unsigned int Xorshift32::random32()
 {
     return xorshift32();
@@ -67,11 +58,15 @@ cpp_int Xorshift32::random(unsigned int bits)
     // avoid unnecessary overhead for 32 bit numbers
     if (bits == 32)
         return cpp_int(random32());
-        
+    
+    // finds the closest multiple of 64 to n
     int n = bits / 64 == 0 ? 1 : bits / 64;
     for (int i = 0; i < n; i++) {
         bigNum |= cpp_int(random64()) << 64 * i;
     }
+
+    // if the number of bits is not a multiple of 64,
+    // truncate it
     if (bits % 64 != 0)
         bigNum = bigNum % pow(cpp_int(2), bits);
     return bigNum;

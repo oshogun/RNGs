@@ -12,6 +12,8 @@ using boost::multiprecision::cpp_int;
 
 namespace PRNG
 {
+    // Interface that defines basic random number generation
+    // operations.
     class PRNG {
         public:
             // Generates a pseudorandom unsigned bigint with a
@@ -27,41 +29,53 @@ namespace PRNG
 
     class Xorshift32: public PRNG {
         public:
+            // Seeds the PRNG with a 32 bit word
             void srand(unsigned int seed);
+            
+            // PRNG interface methods 
             cpp_int random(unsigned int bits);
             unsigned int random32();
             unsigned long long random64();
             
         private:
+            // Current state of the generator
             unsigned int state;
+            // Generates a 32 bit unsigned int using xorshift32
             unsigned int xorshift32();
-            cpp_int xorshift4096_32();
     };
 
     class Xorshift64: public PRNG {
         public:
+            // Seeds the PRNG with a 64 bit word
             void srand(unsigned long long seed);
+
+            // PRNG interface methods
             cpp_int random(unsigned int bits);
             unsigned int random32();
             unsigned long long random64();
             
         private:
+            // Current state of the generator
             unsigned long long state;
+            // Generates a 32 bit unsigned int using xorshift64
             unsigned long long xorshift64();
-            cpp_int xorshift4096_64();
     };
 
     class Xorshift128: public PRNG {
         public:
+            // Seeds the PRNG with an array of four 32 bit words
             void srand(std::array<unsigned int, 4> seed);
+
+            // PRNG interface methods
             cpp_int random(unsigned int bits);
             unsigned int random32();
             unsigned long long random64();
 
         private:
+            // Current state of the generator
             std::array<unsigned int,4> state;
+            // Generates a 32 bit unsigned int using xorshift64
             unsigned int xorshift128();
-            cpp_int xorshift4096_128();
     };
 
     class CMWC: public PRNG {
